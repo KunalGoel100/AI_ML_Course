@@ -1,15 +1,18 @@
 import math
 # Initial weights (Define the curve type)
-W = [0,0,0]
+# W = [1,0,0]
 # Learning Rate
-a = 0.005
+a = 0.01
 # Stopping criteria
-# E = 0.001
+ee = 0.01
 
 # Data
-data = [[-1,-2,0],[3,1,1],[-10,-23,0],[-12,-23,0],[4,3,1],[-56,-45,0],[23,54,1]]
-
-def Logistic(W):
+# data = [[-1,-2,0],[3,1,1],[-10,-23,0],[-12,-23,0],[4,3,1],[-56,-45,0],[23,54,1]]
+# AND Gate
+data1 = [[0,0,0],[0,1,0],[1,0,0],[1,1,1]]
+# NOR Gate
+data = [[0,0,1],[0,1,0],[1,0,0],[1,1,0]]
+def Logistic(W,data):
     Z = []
     X = []
     for i in data:
@@ -19,7 +22,7 @@ def Logistic(W):
     for i in data:
         Z.append(W[0] + W[1]*i[0] + W[2]*i[1])
 
-    print(Z)
+    print(f"Z = {Z}")
 
     Sigmoid = []
     for i in Z:
@@ -43,7 +46,7 @@ def Logistic(W):
 
             Cost.append(-(data[i][2]*math.log(guess[i]) + (1-data[i][2])*math.log((1-guess[i]))))
 
-    # Cost = sum(Cost)
+    Cost = sum(Cost)/len(data)
     print(f"Cost {Cost}")
 
     Grad = [0]*len(X[0])
@@ -55,8 +58,38 @@ def Logistic(W):
         W[i] = W[i] - a*Grad[i]
 
     # print(W)
-    return W
+    return [W,Cost,guess]
 
-for i in range(0,100,1):
-    W = Logistic(W)
+# for i in range(0,100,1):
+Cost = 1
+count = 0
+W1 = [0,0,0]
+W = [0,0,0]
+while Cost >= ee:
+    count += 1
+    [W,Cost,guess] = Logistic(W,data)
+    [W1,Cost,guess1] = Logistic(W1,data1)
+    if count >= 10000:
+        break
+print(f"Final W = {W}")
+print(f"Final W1 = {W1}")
+
+# data3 = [[0,0,0],[0,1,1],[1,0,1],[1,1,0]]
+y3 = [0,1,1,0]
+W3 = [0,0,0]
+data3 = []
+for i in range(0,len(guess),1):
+    data3.append([guess[i],guess1[i],y3[i]])
+
+
+print(data3)
+Cost = 1
+count = 0
+while Cost >= ee:
+    count += 1
+    [W3,Cost,guess3] = Logistic(W3,data3)
+    if count >= 10000:
+        break
+print(f"Final W3 = {W3}")
+
 
