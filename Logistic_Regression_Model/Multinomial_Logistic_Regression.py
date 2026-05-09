@@ -1,13 +1,13 @@
 import math
-a = 1
-E = 0.01
+a = 0.01
+E = 0.0001
 # W_old = [[0,0,0,0],[0,0,0,0],[0,0,0,0]]
 # data = [[2,2,4],[3,5,9],[1,2,4],[4,4,8],[9,7,1],[3,5,8]]
 # data_y = [[1,0,0],[0,1,0],[0,0,1],[1,0,0],[0,1,0],[0,0,1]]
 
 W_old = [[0,0,0],[0,0,0]]
-data = [[2,2],[3,5],[4,4],[9,7]]
-data_y = [[1,0],[0,1],[1,0],[0,1]]
+data = [[2,2],[3,5],[4,4],[9,7],[2,4],[2,2]]
+data_y = [[1,0],[0,1],[1,0],[0,1],[1,0],[1,0]]
 
 data_x = [[1] + x for x in data]
 def Multi(W):
@@ -21,13 +21,14 @@ def Multi(W):
         Z[j] = Z_temp
     print(f"Z: {Z}")
 
-    Y_Hat_temp1 = [0]*len(data)
+
+    Y_Hat_temp1 = [0]*len(data_y)
     for j in range(0,len(data),1):
-        Y_Hat_temp2 = [0] * len(data[0])
+        Y_Hat_temp2 = [0] * len(data_y[0])
         for i in range(0,len(data[0]),1):
             Y_Hat_temp2[i] = math.exp(Z[j][i])
         Y_Hat_temp1[j] = Y_Hat_temp2
-    print(f"Y_Hat_temp1: {Y_Hat_temp1}")
+    # print(f"Y_Hat_temp1: {Y_Hat_temp1}")
 
     for j in range(0,len(data),1):
         temp = sum(Y_Hat_temp1[j])
@@ -43,32 +44,31 @@ def Multi(W):
 
     print(f"Cost {Cost}")
 
-    Slope = [0]*len(data[0])
-    for j in range(0,len(data[0]),1):
+    Slope = [0]*len(data_y[0])
+    for j in range(0,len(data_y[0]),1):
         Slope_temp = [0] * len(W[0])
         for i in range(0,len(W[0]),1):
-            for k in range(0,len(data),1):
-                if i == 0:
-                    Slope_temp[i] += -(data_y[k][j] - Y_Hat[k][j])*1
-                else:
-                    Slope_temp[i] += -(data_y[k][j] - Y_Hat[k][j])*data[k][i-1]
-
+            for k in range(0,len(data_y),1):
+                Slope_temp[i] += -(data_y[k][j] - Y_Hat[k][j])*data_x[k][i]
         Slope[j] = Slope_temp
 
-    print(f"Slope: {Slope}")
+    # print(f"Slope: {Slope}")
 
     for j in range(0,len(data[0]),1):
         for i in range(0,len(W[0]),1):
             W[j][i] -= a*Slope[j][i]
 
-    print(f"W: {W}")
+    # print(f"W: {W}")
     return [W,Cost]
 
 # for i in range(0,1000,1):
 Cost = 1
 Count = 0
-while Cost >= E:
+diff = 1
+while diff >= E:
+    Cost_old = Cost
     [W_old,Cost] = Multi(W_old)
+    diff = abs(Cost_old - Cost)
     Count += 1
     print(Count)
     if Count >= 50000:
