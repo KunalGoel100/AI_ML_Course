@@ -1,7 +1,7 @@
 import math
 import copy
 import random
-a = 0.01
+a = 0.1
 E = 0.001
 e = 1e-15
 
@@ -52,15 +52,16 @@ for i in range(0,len(data_y[0]),1):
 ## Back Propagation (Finite difference method)
 def BackProp(W):
     h = 0.01
+    Cost1 = Multi(W)
+    W_new = copy.deepcopy(W)
     for i in range(0,len(W),1):
         for j in range(0,len(W[0]),1):
             W2 = copy.deepcopy(W)
             W2[i][j] += h
-            Cost1 = Multi(W)
             Cost2 = Multi(W2)
             Slope = (Cost2-Cost1)/h
-            W[i][j] -= a*Slope
-    return [W,Cost1]
+            W_new[i][j] -= a*Slope
+    return [W_new,Cost1]
 
 #########################################################
 ## MultiNomial Classification Function
@@ -102,11 +103,11 @@ while diff >= E:
     Cost_old = Cost
     # Multi(W_old)
     [W_old,Cost] = BackProp(W_old)
-    # [W_old,Cost] = Multi(W_old)
+    print(Cost)
     diff = abs(Cost_old - Cost)
     Count += 1
-    print(Count)
-    if Count >= 100:
+    # print(Count)
+    if Count >= 10000:
         break
 # print(W_old)
 ##############################
