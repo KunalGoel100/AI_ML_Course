@@ -1,16 +1,23 @@
 # Polinomial Regression Model
 # Can make Linear, Quadratic, Cubit, etc lines
 
+import matplotlib
+from matplotlib import pyplot as plt
+
 # Initial weights (Define the curve type)
-W = [0.1,0.2,0.1]
+W = [0,0,0]
 # Learning Rate
-a = 0.0002
+a = 0.0001
 # Stopping criteria
-E = 0.001
+E = 0.1
 
 # Data
 data = [[1,1],[2,4],[3,9],[4,16],[5,25],[6,36],[7,49],[8,64],[9,81],[10,100]]
 # data = [[1,2],[2,4],[3,6],[4,8],[5,10],[6,12]]
+# # Normalize data
+# x_max = max(d[0] for d in data)
+# data = [[d[0]/x_max, d[1]] for d in data]
+
 def GradientDescent(W):
     Guess = []
     for j in range(0,len(data),1):
@@ -38,15 +45,24 @@ def GradientDescent(W):
 
 Cost = 1
 count = 0
+#################################
+## Graph
+plt.figure(figsize=[10,6])
+# plt.subplot(2,2,1)
+
+
+#################################
 while Cost >= E:
 # for i in range(0,10,1):
     [W, Cost] = GradientDescent(W)
     count = count +1
     if count >= 100000:
         break
+    plt.plot(count,Cost,marker='o')
+
 print(W)
 print(count)
-
+plt.show()
 mean = 0
 for i in data:
     mean = mean + i[1]
@@ -64,6 +80,7 @@ print(f"SST = {SST}")
 RSquare = 1 - SSE/SST
 
 print(F"RSquare = {RSquare}")
+####################
 
 
 
