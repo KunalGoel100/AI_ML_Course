@@ -10,7 +10,7 @@ def Conv(X,F):
 
     Ox = nxx-nfx+1
     Oy = nxy-nfy+1
-    Output = np.array([[0]*Ox]*Oy)
+    Output = np.zeros((Ox, Oy))
     # print(Output)
 
 
@@ -27,9 +27,9 @@ def ReLU(Input):
 def MaxPolling(Input):
     Poling = [2,2]
     Stride = 1
-    Ox = (Input.shape[0]-Poling[0])/Stride + 1
-    Oy = (Input.shape[1]-Poling[1])/Stride + 1
-    Output = np.array([[0]*int(Ox)]*int(Oy))
+    Ox = int((Input.shape[0]-Poling[0])/Stride + 1)
+    Oy = int((Input.shape[1]-Poling[1])/Stride + 1)
+    Output = np.zeros((Ox,Oy))
     # print(Output)
 
     for i in range(0,int(Ox),1):
@@ -68,9 +68,9 @@ y = 1  # say class 1
 ## Filter (Kernal)
 # F = np.random.randn(3,3)
 F = np.array([
-    [1,0,1],
-    [0,1,0],
-    [1,0,1]
+    [1,1,1],
+    [0,0,0],
+    [-1,-1,-1]
 ])
 ############################################
 conv_out = Conv(X,F)
@@ -82,9 +82,9 @@ print(poling_out)
 flatten_out = Flatten(poling_out)
 print(flatten_out)
 
-W = np.random.randn(1,flatten_out.size)
+W = np.random.randn(4,flatten_out.size)
 print(W)
-bias = np.zeros([flatten_out.size,1])
+bias = np.zeros([4,1])
 dense_out = Dense(flatten_out,W,bias)
 print(dense_out)
 softmax_out = Softmax(dense_out)
