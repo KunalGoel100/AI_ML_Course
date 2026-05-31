@@ -65,6 +65,7 @@ model.fit(dataset, epochs=100)
 # # print("Prediction:", np.argmax(pred))
 
 # ✅ Predict
+
 print(images[0].shape)
 image = tf.random.uniform((1, 8, 8, 3))
 print(image)
