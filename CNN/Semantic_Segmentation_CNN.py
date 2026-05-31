@@ -59,7 +59,7 @@ model.summary()
 # #
 # Train
 model.fit(dataset, epochs=100)
-# #
+# #with
 # # # Test prediction
 # # pred = model.predict(x_test[5].reshape(1,28,28,1))
 # # print("Prediction:", np.argmax(pred))

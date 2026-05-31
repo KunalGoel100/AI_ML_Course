@@ -1,7 +1,6 @@
 import numpy as np
 from mpmath import zeros
 
-
 # print(F)
 ## Convolution layer Function (Sum of Products)
 def Conv(X,F):
