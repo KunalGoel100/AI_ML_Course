@@ -10,7 +10,7 @@ from sympy.codegen.rewriting import optimize
 # plt.axis('off')   # removes axis numbers
 # plt.show()
 
-IMG_SIZE = 64
+IMG_SIZE = 4
 BATCH_SIZE = 10
 
 # Create random images
@@ -26,14 +26,12 @@ print(images[0])
 plt.imshow(masks[0])
 plt.title("Image")
 plt.show()
-
-
 #
 # Model
 model = tf.keras.Sequential([
 #
     # Convolution layer
-    tf.keras.layers.Conv2D(64, (3,3),input_shape=(64,64,3),padding='same',activation='relu'),
+    tf.keras.layers.Conv2D(64, (3,3),input_shape=(None,None,3),padding='same',activation='relu'),
     # tf.keras.layers.MaxPooling2D((2,2)),
 
     tf.keras.layers.Conv2D(32, (3,3),padding='same',activation='relu'),
@@ -68,11 +66,10 @@ model.fit(dataset, epochs=100)
 
 # ✅ Predict
 print(images[0].shape)
-pred = model.predict(images[:1])
+image = tf.random.uniform((1, 8, 8, 3))
+print(image)
+pred = model.predict(image)
 # print(pred.shape)
-# plt.imshow(pred[0,:,:])
-# plt.title("Predicted image")
-# plt.show()
 output = tf.cast(pred[0,:,:] > 0.5, tf.float32)
 # print(output)
 plt.imshow(output)
