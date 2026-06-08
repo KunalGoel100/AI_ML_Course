@@ -64,9 +64,23 @@ dataset = dataset.map(clean_pipeline).prefetch(tf.data.AUTOTUNE)
 ####################################################
 ## 3. Model Definition
 model = tf.keras.Sequential([
-    tf.keras.layers.Conv2D(64, (3, 3), input_shape=(None, None, 3), padding='same', activation='elu'),
+    # Down
+    tf.keras.layers.Conv2D(16, (3, 3), input_shape=(256, 256, 3), padding='same', activation='elu'),
+    tf.keras.layers.MaxPooling2D(pool_size=(2,2),strides=2),
     tf.keras.layers.Conv2D(32, (3, 3), padding='same', activation='elu'),
+    tf.keras.layers.MaxPooling2D(pool_size=(2,2),strides=2),
+    tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='elu'),
+    tf.keras.layers.MaxPooling2D(pool_size=(2,2),strides=2),
+
+    # Up
+    tf.keras.layers.Conv2DTranspose(64,(3,3),strides=(2,2),padding='same',activation='elu'),
+    tf.keras.layers.Conv2D(64, (3, 3), padding='same', activation='elu'),
+    tf.keras.layers.Conv2DTranspose(32,(3,3),strides=(2,2),padding='same',activation='elu'),
+    tf.keras.layers.Conv2D(32, (3, 3), padding='same', activation='elu'),
+    tf.keras.layers.Conv2DTranspose(16,(3,3),strides=(2,2),padding='same',activation='elu'),
     tf.keras.layers.Conv2D(16, (3, 3), padding='same', activation='elu'),
+
+    # Output
     tf.keras.layers.Conv2D(11, (1, 1), activation='softmax')  # 11 channel output matching 11 classes
 ])
 
@@ -77,9 +91,9 @@ model.compile(
     loss='sparse_categorical_crossentropy',  # Correct loss for 1-channel integer indices
     metrics=['accuracy']
 )
-
+model.summary()
 # Train the model
-model.fit(dataset, epochs=20)
+model.fit(dataset, epochs=10)
 # model.save_weights("base_rgb_test.weights.h5")
 #
 # ###################################
