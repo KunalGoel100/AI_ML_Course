@@ -77,7 +77,7 @@ model.compile(
 # model.save_weights("SavedWeights.weights.h5")
 # Test prediction
 ###############################################################
-img = cv2.imread(r"C:\KunalGoel\AI_ML_Course\CNN\HandWrittenNumber_CNN\Data\Exp_1.jpg", 0)
+img = cv2.imread(r"C:\KunalGoel\AI_ML_Course\CNN\HandWrittenNumber_CNN\Data\Exp_4.jpg", 0)
 
 _, thresh = cv2.threshold(
     img,
